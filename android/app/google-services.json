@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680298830709",
+    "project_id": "db-miner-bf0f9",
+    "storage_bucket": "db-miner-bf0f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680298830709:android:2e8e3233378e88b10a513c",
+        "android_client_info": {
+          "package_name": "com.example.db_miner_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaOBR6wGcdAzUMqT6iiye_Th4OYuShh5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

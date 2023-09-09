@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyA5vPZiz2yr6lzdQ6XJlcQTgNIpkynH2hE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>680298830709</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.dbMinerFirebase.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>db-miner-bf0f9</string>
+	<key>STORAGE_BUCKET</key>
+	<string>db-miner-bf0f9.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:680298830709:ios:a58f7a588f1c77a60a513c</string>
+</dict>
+</plist>
