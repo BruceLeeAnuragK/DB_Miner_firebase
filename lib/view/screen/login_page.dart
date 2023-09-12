@@ -1,4 +1,6 @@
+import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,9 +12,40 @@ class LoginPage extends StatelessWidget {
         title: Text("Login Page"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: Text("Login"),
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                bool login = await AuthHelper.authHelper.loginAnonymusly();
+                if (login) {
+                  Get.offNamed("/HomePage");
+                }
+              },
+              child: Text("Anonymously Login"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                bool login = await AuthHelper.authHelper.registerUser(
+                  email: "demo12@gmail.com",
+                  password: "d1e2m3o4",
+                );
+              },
+              child: Text("Register"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                bool login =
+                    await AuthHelper.authHelper.loginWithUserNamePassword(
+                  email: "demo12@gmail.com",
+                  password: "d1e2m3o4",
+                );
+                if (login) {
+                  Get.offNamed("/HomePage");
+                }
+              },
+              child: Text("Sign in with Email Password"),
+            ),
+          ],
         ),
       ),
     );
