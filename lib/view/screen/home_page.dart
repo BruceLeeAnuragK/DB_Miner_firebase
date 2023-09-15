@@ -4,7 +4,7 @@ import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
+import 'user_model';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatelessWidget {

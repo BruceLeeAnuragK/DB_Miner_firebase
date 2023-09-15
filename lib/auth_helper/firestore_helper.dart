@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:db_miner_firebase/model/student_model.dart';
 
 import "../model/student_model'.dart";
 
