@@ -1,6 +1,7 @@
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -44,6 +45,17 @@ class LoginPage extends StatelessWidget {
                 }
               },
               child: Text("Sign in with Email Password"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                GoogleSignInAccount account =
+                    await AuthHelper.authHelper.googleSignIn();
+
+                if (login) {
+                  Get.offNamed("/HomePage");
+                }
+              },
+              child: Text("Sign in with Google"),
             ),
           ],
         ),

@@ -2,17 +2,22 @@ import 'dart:developer';
 
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = Get.arguments;
     return Scaffold(
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(accountName: , accountEmail: accountEmail)
+            UserAccountsDrawerHeader(accountName:account., accountEmail: accountEmail)
           ],
         ),
       ),
