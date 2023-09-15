@@ -31,12 +31,40 @@ class FireStoreHelper {
 
   Future<List<Student>> getAllStudent() async {
     QuerySnapshot data = await firestore.collection(collection).get();
+
     List<QueryDocumentSnapshot> allData = data.docs;
-    List<Student> allStudent = allData
-        .map(
-          (e) => Student.fromMap(data: e.data() as Map),
-        )
-        .toList();
-    return allStudent;
+
+    List<Student> allStudents =
+        allData.map((e) => Student.fromMap(Sdata: e.data() as Map)).toList();
+
+    return allStudents;
+  }
+
+  Stream<QuerySnapshot> getDataStream() {
+    return firestore.collection(collection).snapshots();
+  }
+
+  Future<int> getCounter() async {
+    QuerySnapshot data = await firestore.collection(counter).get();
+
+    List<QueryDocumentSnapshot> doc = data.docs;
+
+    Map<String, dynamic> count = doc[0].data() as Map<String, dynamic>;
+
+    int idCount = count['val'];
+
+    log('Id count: $idCount');
+
+    return idCount;
+  }
+
+  increaseId() async {
+    int id = await getCounter();
+
+    Map<String, dynamic> data = {
+      'val': ++id,
+    };
+
+    firestore.collection(counter).doc('count').set(data);
   }
 }

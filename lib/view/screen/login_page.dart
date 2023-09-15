@@ -1,4 +1,5 @@
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
+import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -48,11 +49,15 @@ class LoginPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                GoogleSignInAccount account =
+                GoogleSignInAccount? account =
                     await AuthHelper.authHelper.googleSignIn();
 
-                if (login) {
-                  Get.offNamed("/HomePage");
+                if (account != null) {
+                  UserModel user = UserModel();
+                  user.username = account.displayName;
+                  user.email = account.email;
+                  user.image = account.photoUrl;
+                  Get.offNamed("/HomePage", arguments: user);
                 }
               },
               child: Text("Sign in with Google"),

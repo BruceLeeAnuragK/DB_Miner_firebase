@@ -1,11 +1,9 @@
-import 'dart:developer';
-
+import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
+import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'user_model';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,13 +15,37 @@ class HomePage extends StatelessWidget {
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(accountName:account., accountEmail: accountEmail)
+            UserAccountsDrawerHeader(
+              accountName: Text("${user?.username ?? 'Anonymous'} "),
+              accountEmail: Visibility(
+                visible: user != null,
+                child: Text("${user?.email ?? 'n0@gmail.com'}"),
+              ),
+            ),
           ],
         ),
       ),
       appBar: AppBar(
-        title: Text("Home Page"),
+        backgroundColor: Colors.deepPurple,
+        title: Text(
+          "Home Page",
+          style: GoogleFonts.sofia(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              AuthHelper.authHelper.signOut();
+              Get.offNamed('/');
+            },
+            icon: Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: FireStoreHelper.storeHelper.getAllStudent(),
@@ -36,8 +58,7 @@ class HomePage extends StatelessWidget {
                 subtitle: Text(snapShot.data![index].age),
               ),
             );
-          }
-          else{
+          } else {
             return const Center(
               child: CircularProgressIndicator(),
             );
