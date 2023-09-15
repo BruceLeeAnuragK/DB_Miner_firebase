@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -6,14 +9,35 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(accountName: , accountEmail: accountEmail)
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text("Home Page"),
         centerTitle: true,
       ),
       body: FutureBuilder(
-        // future: AuthHelper.authHelper,
-        builder: (context, snapShot) {},
+        future: FireStoreHelper.storeHelper.getAllStudent(),
+        builder: (context, snapShot) {
+          if (snapShot.hasData) {
+            return ListView.builder(
+              itemCount: snapShot.data!.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Text(snapShot.data![index].name),
+                subtitle: Text(snapShot.data![index].age),
+              ),
+            );
+          }
+          else{
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -31,8 +31,11 @@ class FireStoreHelper {
   Future<List<Student>> getAllStudent() async {
     QuerySnapshot data = await firestore.collection(collection).get();
     List<QueryDocumentSnapshot> allData = data.docs;
-    List<Student> allStudent =
-        allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
+    List<Student> allStudent = allData
+        .map(
+          (e) => Student.fromMap(data: e.data() as Map),
+        )
+        .toList();
     return allStudent;
   }
 }
