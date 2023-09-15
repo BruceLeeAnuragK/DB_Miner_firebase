@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../model/student_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -47,15 +50,20 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: FireStoreHelper.storeHelper.getAllStudent(),
+      body: StreamBuilder(
+        stream: FireStoreHelper.storeHelper.getDataStream(),
         builder: (context, snapShot) {
           if (snapShot.hasData) {
+            List<QueryDocumentSnapshot> docs = snapShot.data!.docs;
+            List<Student> allStudents = docs
+                .map((e) => Student.fromMap(Sdata: e.data() as Map))
+                .toList();
+            newId = allStudents.length + 101;
             return ListView.builder(
-              itemCount: snapShot.data!.length,
+              itemCount: allStudents.length,
               itemBuilder: (context, index) => ListTile(
-                title: Text(snapShot.data![index].name),
-                subtitle: Text(snapShot.data![index].age),
+                title: Text(allStudents[index].name),
+                subtitle: Text(allStudents[index].age),
               ),
             );
           } else {
