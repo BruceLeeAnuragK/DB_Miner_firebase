@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_miner_firebase/model/student_model.dart';
 
-import "../model/student_model'.dart";
-
 class FireStoreHelper {
   FireStoreHelper._();
   static final FireStoreHelper storeHelper = FireStoreHelper._();
@@ -35,7 +33,7 @@ class FireStoreHelper {
     List<QueryDocumentSnapshot> allData = data.docs;
 
     List<Student> allStudents =
-        allData.map((e) => Student.fromMap(Sdata: e.data() as Map)).toList();
+        allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
 
     return allStudents;
   }

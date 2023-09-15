@@ -56,9 +56,9 @@ class HomePage extends StatelessWidget {
           if (snapShot.hasData) {
             List<QueryDocumentSnapshot> docs = snapShot.data!.docs;
             List<Student> allStudents = docs
-                .map((e) => Student.fromMap(Sdata: e.data() as Map))
+                .map((e) => Student.fromMap(data: e.data() as Map))
                 .toList();
-            newId = allStudents.length + 101;
+            int newId = allStudents.length + 101;
             return ListView.builder(
               itemCount: allStudents.length,
               itemBuilder: (context, index) => ListTile(
