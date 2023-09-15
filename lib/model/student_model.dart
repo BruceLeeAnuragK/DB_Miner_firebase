@@ -9,10 +9,10 @@ class Student {
     required this.age,
   });
 
-  factory Student.fromMap(Map data, {required Map<dynamic, dynamic> data}) =>
+  factory Student.fromMap(Map data, {required Map<dynamic, dynamic> Sdata}) =>
       Student(
-        id:data['id'],
-        name: data["name"],
-        age: data["age"],
+        id: Sdata['id'],
+        name: Sdata["name"],
+        age: Sdata["age"],
       );
 }
