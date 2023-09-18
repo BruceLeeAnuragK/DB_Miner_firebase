@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,7 +14,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
         title: Text("Login Page"),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -53,6 +58,7 @@ class LoginPage extends StatelessWidget {
                     await AuthHelper.authHelper.googleSignIn();
 
                 if (account != null) {
+                  log(" ###################################################name = ${account.displayName}");
                   UserModel user = UserModel();
                   user.username = account.displayName;
                   user.email = account.email;

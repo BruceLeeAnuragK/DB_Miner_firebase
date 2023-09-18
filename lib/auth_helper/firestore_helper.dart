@@ -5,6 +5,7 @@ import 'package:db_miner_firebase/model/student_model.dart';
 
 class FireStoreHelper {
   FireStoreHelper._();
+
   static final FireStoreHelper storeHelper = FireStoreHelper._();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -22,9 +23,11 @@ class FireStoreHelper {
       colAge: student.age,
     };
 
-    firestore.collection(collection).add(data).then((value) {
-      log("Student added !!\nID: ${value.id}");
-    });
+    firestore.collection(collection).add(data).then(
+      (value) {
+        log("Student added !!\nID: ${value.id}");
+      },
+    );
   }
 
   Future<List<Student>> getAllStudent() async {
@@ -64,5 +67,16 @@ class FireStoreHelper {
     };
 
     firestore.collection(counter).doc('count').set(data);
+  }
+
+  getUser({required int id}) {
+    return firestore.collection(collection).doc(toString()).snapshots();
+  }
+
+  getCredential({required int id}) async {
+    DocumentSnapshot snapshot =
+        await firestore.collection(collection).doc(id.toString()).get();
+    Map userData = snapshot.data() as Map;
+    return userData['password'];
   }
 }
