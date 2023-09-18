@@ -5,7 +5,6 @@ import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../model/student_model.dart';
 
 class HomePage extends StatelessWidget {
@@ -61,10 +60,11 @@ class HomePage extends StatelessWidget {
             int newId = allStudents.length + 101;
             return ListView.builder(
               itemCount: allStudents.length,
-              itemBuilder: (context, index) => ListTile(
-                title: Text(allStudents[index].name),
-                subtitle: Text(allStudents[index].age),
-              ),
+              itemBuilder: (context, index) =>
+                  ListTile(
+                    title: Text(allStudents[index].name),
+                    subtitle: Text(allStudents[index].age.toString()),
+                  ),
             );
           } else {
             return const Center(
@@ -80,27 +80,43 @@ class HomePage extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: Text("Add Student"),
-              insetPadding: EdgeInsets.all(10),
-              content: Column(
-                children: [
-                  TextField(
-                    controller: nameContoller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
+            builder: (context) =>
+                AlertDialog(
+                  title: Text("Add Student"),
+                  insetPadding: EdgeInsets.all(10),
+                  content: Column(
+                    children: [
+                      TextField(
+                        controller: nameContoller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      TextField(
+                        controller: ageContoller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    controller: ageContoller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  actions: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Student student = Student(
+                          id: 101,
+                          name: nameContoller.text,
+                          age: int.parse(ageContoller.text),
+                        );
+
+                        FireStoreHelper.storeHelper.addStudent(
+                            student: student);
+                      },
+                      icon: Icon(Icons.add),
+                      label: Text("Submit"),
                     ),
-                  ),
-                ],
-              ),
-              actions: [ElevatedButton(onPressed: () {}, child: TextField())],
-            ),
+                  ],
+                ),
           );
         },
       ),

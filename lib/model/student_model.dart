@@ -1,7 +1,7 @@
 class Student {
   int id;
   String name;
-  String age;
+  int age;
 
   Student({
     required this.id,
