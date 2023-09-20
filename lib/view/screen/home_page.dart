@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../model/student_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,22 +51,30 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: FireStoreHelper.storeHelper.getDataStream(),
+        stream: FireStoreHelper.storeHelper.getUser(id: 101),
         builder: (context, snapShot) {
           if (snapShot.hasData) {
-            List<QueryDocumentSnapshot> docs = snapShot.data!.docs;
-            List<Student> allStudents = docs
-                .map((e) => Student.fromMap(data: e.data() as Map))
-                .toList();
-            int newId = allStudents.length + 101;
-            return ListView.builder(
-              itemCount: allStudents.length,
-              itemBuilder: (context, index) =>
-                  ListTile(
-                    title: Text(allStudents[index].name),
-                    subtitle: Text(allStudents[index].age.toString()),
-                  ),
-            );
+            List<QueryDocumentSnapshot>? docs =
+                (snapShot.data as QuerySnapshot?)?.docs;
+            if (docs != null) {
+              List<Student> allStudents = docs
+                  .map((doc) =>
+                      Student.fromMap(data: doc.data() as Map<String, dynamic>))
+                  .toList();
+
+              int newId = allStudents.length + 101;
+              return ListView.builder(
+                itemCount: allStudents.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(allStudents[index].name),
+                  subtitle: Text(allStudents[index].age.toString()),
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text("no docs"),
+              );
+            }
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -80,43 +89,41 @@ class HomePage extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (context) =>
-                AlertDialog(
-                  title: Text("Add Student"),
-                  insetPadding: EdgeInsets.all(10),
-                  content: Column(
-                    children: [
-                      TextField(
-                        controller: nameContoller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      TextField(
-                        controller: ageContoller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Student student = Student(
-                          id: 101,
-                          name: nameContoller.text,
-                          age: int.parse(ageContoller.text),
-                        );
-
-                        FireStoreHelper.storeHelper.addStudent(
-                            student: student);
-                      },
-                      icon: Icon(Icons.add),
-                      label: Text("Submit"),
+            builder: (context) => AlertDialog(
+              title: Text("Add Student"),
+              insetPadding: EdgeInsets.all(10),
+              content: Column(
+                children: [
+                  TextField(
+                    controller: nameContoller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
-                  ],
+                  ),
+                  TextField(
+                    controller: ageContoller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Student student = Student(
+                      id: 101,
+                      name: nameContoller.text,
+                      age: int.parse(ageContoller.text),
+                    );
+
+                    FireStoreHelper.storeHelper.addStudent(student: student);
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text("Submit"),
                 ),
+              ],
+            ),
           );
         },
       ),

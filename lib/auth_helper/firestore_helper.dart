@@ -41,8 +41,8 @@ class FireStoreHelper {
     return allStudents;
   }
 
-  Stream<QuerySnapshot> getDataStream() {
-    return firestore.collection(collection).snapshots();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getDataStream() {
+    return firestore.collection(collection).doc().snapshots();
   }
 
   Future<int> getCounter() async {
@@ -70,7 +70,7 @@ class FireStoreHelper {
   }
 
   getUser({required int id}) {
-    return firestore.collection(collection).doc(toString()).snapshots();
+    return firestore.collection(collection).doc(id.toString()).snapshots();
   }
 
   getCredential({required int id}) async {
@@ -78,5 +78,20 @@ class FireStoreHelper {
         await firestore.collection(collection).doc(id.toString()).get();
     Map userData = snapshot.data() as Map;
     return userData['password'];
+  }
+
+  getChats({required int senderId, required int receivedId}) async {
+    Map sender = await getUser(id: senderId);
+    Map senderChat = sender['sent']['$receivedId'];
+    Map recievedChat = sender['recieved']['$receivedId'];
+    Map chats = {
+      'sent': senderChat,
+      'recieved': senderChat,
+    };
+    return chats;
+  }
+
+  getUserStream({required int userId}) {
+    return firestore.collection(collection).doc(userId.toString()).snapshots();
   }
 }
