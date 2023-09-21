@@ -1,5 +1,7 @@
+import 'package:db_miner_firebase/view/screen/chat_page.dart';
 import 'package:db_miner_firebase/view/screen/home_page.dart';
 import 'package:db_miner_firebase/view/screen/login_page.dart';
+import 'package:db_miner_firebase/view/screen/person_chat.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: "/", page: () => LoginPage()),
         GetPage(name: "/HomePage", page: () => HomePage()),
+        GetPage(name: "/ChatPage", page: () => ChatPage()),
+        GetPage(name: "/PersonChatPage", page: () => PersonChatPage()),
       ],
     );
   }
