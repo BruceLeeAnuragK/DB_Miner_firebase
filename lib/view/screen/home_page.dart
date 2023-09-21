@@ -56,19 +56,21 @@ class HomePage extends StatelessWidget {
           if (snapShot.hasData) {
             List<QueryDocumentSnapshot>? docs =
                 (snapShot.data as QuerySnapshot?)?.docs;
+
             if (docs != null) {
               List<Student> allStudents = docs
                   .map((doc) =>
-                      Student.fromMap(data: doc.data() as Map<String, dynamic>))
+                  Student.fromMap(data: doc.data() as Map<String, dynamic>))
                   .toList();
 
               int newId = allStudents.length + 101;
               return ListView.builder(
                 itemCount: allStudents.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(allStudents[index].name),
-                  subtitle: Text(allStudents[index].age.toString()),
-                ),
+                itemBuilder: (context, index) =>
+                    ListTile(
+                      title: Text(allStudents[index].name),
+                      subtitle: Text(allStudents[index].age.toString()),
+                    ),
               );
             } else {
               return const Center(
@@ -89,41 +91,43 @@ class HomePage extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: Text("Add Student"),
-              insetPadding: EdgeInsets.all(10),
-              content: Column(
-                children: [
-                  TextField(
-                    controller: nameContoller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
+            builder: (context) =>
+                AlertDialog(
+                  title: Text("Add Student"),
+                  insetPadding: EdgeInsets.all(10),
+                  content: Column(
+                    children: [
+                      TextField(
+                        controller: nameContoller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      TextField(
+                        controller: ageContoller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    controller: ageContoller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ],
-              ),
-              actions: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Student student = Student(
-                      id: 101,
-                      name: nameContoller.text,
-                      age: int.parse(ageContoller.text),
-                    );
+                  actions: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Student student = Student(
+                          id: 101,
+                          name: nameContoller.text,
+                          age: int.parse(ageContoller.text),
+                        );
 
-                    FireStoreHelper.storeHelper.addStudent(student: student);
-                  },
-                  icon: Icon(Icons.add),
-                  label: Text("Submit"),
+                        FireStoreHelper.storeHelper.addStudent(
+                            student: student);
+                      },
+                      icon: Icon(Icons.add),
+                      label: Text("Submit"),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           );
         },
       ),
