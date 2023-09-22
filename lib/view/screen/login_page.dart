@@ -101,13 +101,10 @@ class LoginPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  bool login =
-                  await AuthHelper.authHelper.loginWithUserNamePassword(
-                    email: usercontroller.text,
-                    password: passcontroller.text,
-                  );
+                  bool login = await FireStoreHelper.storeHelper.getUserStream(
+                      userId: int.parse("${usercontroller..text}"));
                   if (login) {
-                    Get.offNamed("/HomePage");
+                    Get.offNamed("/ChatPage");
                   }
                 },
                 child: Padding(
@@ -129,7 +126,7 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       bool login =
-                      await AuthHelper.authHelper.loginAnonymusly();
+                          await AuthHelper.authHelper.loginAnonymusly();
                       if (login) {
                         Get.offNamed("/HomePage");
                       }
@@ -156,12 +153,10 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       GoogleSignInAccount? account =
-                      await AuthHelper.authHelper.googleSignIn();
+                          await AuthHelper.authHelper.googleSignIn();
 
                       if (account != null) {
-                        log(
-                            " ###################################################name = ${account
-                                .displayName}");
+                        log(" ###################################################name = ${account.displayName}");
                         UserModel user = UserModel();
                         user.username = account.displayName;
                         user.email = account.email;
