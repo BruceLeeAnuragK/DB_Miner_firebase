@@ -8,6 +8,7 @@ class AuthHelper {
 
   static final AuthHelper authHelper = AuthHelper._pc();
   GoogleSignIn google = GoogleSignIn();
+
   loginAnonymusly() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
@@ -47,8 +48,13 @@ class AuthHelper {
 
   loginWithUserNamePassword(
       {required String email, required String password}) async {
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      return false;
+    }
   }
 
   Future<GoogleSignInAccount?> googleSignIn() async {
