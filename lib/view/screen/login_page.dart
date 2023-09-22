@@ -9,7 +9,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
+
+  TextEditingController usercontroller = TextEditingController();
+  TextEditingController passcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class LoginPage extends StatelessWidget {
                         .getCredential(id: int.parse(val));
                     log("PSW:  $psw");
                   },
+                  controller: usercontroller,
                   decoration: const InputDecoration(
                     labelText: "Username",
                     border: OutlineInputBorder(),
@@ -64,33 +68,60 @@ class LoginPage extends StatelessWidget {
                         .getCredential(id: int.parse(val));
                     log("PSW:  $psw");
                   },
+                  controller: passcontroller,
                   decoration: const InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(),
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  bool login = await AuthHelper.authHelper.registerUser(
-                    email: "demo12@gmail.com",
-                    password: "d1e2m3o4",
-                  );
-                },
-                child: Text("Register"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("If you are new user then"),
+                  MaterialButton(
+                    onPressed: () async {
+                      bool login = await AuthHelper.authHelper.registerUser(
+                        email: "demo12@gmail.com",
+                        password: "d1e2m3o4",
+                      );
+                    },
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 50,
               ),
               ElevatedButton(
                 onPressed: () async {
                   bool login =
-                      await AuthHelper.authHelper.loginWithUserNamePassword(
-                    email: "demo12@gmail.com",
-                    password: "d1e2m3o4",
+                  await AuthHelper.authHelper.loginWithUserNamePassword(
+                    email: usercontroller.text,
+                    password: passcontroller.text,
                   );
                   if (login) {
                     Get.offNamed("/HomePage");
                   }
                 },
-                child: Text("Sign in with Email Password"),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    "Log In",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +129,7 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       bool login =
-                          await AuthHelper.authHelper.loginAnonymusly();
+                      await AuthHelper.authHelper.loginAnonymusly();
                       if (login) {
                         Get.offNamed("/HomePage");
                       }
@@ -106,14 +137,16 @@ class LoginPage extends StatelessWidget {
                     child: Container(
                       height: 50,
                       width: 50,
-                      decoration:
-                          BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 10,
-                          offset: Offset(5, 5),
-                        ),
-                      ]),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 10,
+                            offset: Offset(5, 5),
+                          ),
+                        ],
+                      ),
                       child: Image.network(
                         "https://i.pinimg.com/564x/16/0e/44/160e44f4fa8a509958d2cb9fc46b5c16.jpg",
                         fit: BoxFit.cover,
@@ -123,10 +156,12 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       GoogleSignInAccount? account =
-                          await AuthHelper.authHelper.googleSignIn();
+                      await AuthHelper.authHelper.googleSignIn();
 
                       if (account != null) {
-                        log(" ###################################################name = ${account.displayName}");
+                        log(
+                            " ###################################################name = ${account
+                                .displayName}");
                         UserModel user = UserModel();
                         user.username = account.displayName;
                         user.email = account.email;
@@ -137,14 +172,16 @@ class LoginPage extends StatelessWidget {
                     child: Container(
                       height: 50,
                       width: 50,
-                      decoration:
-                          BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 10,
-                          offset: Offset(5, 5),
-                        ),
-                      ]),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 10,
+                            offset: Offset(5, 5),
+                          ),
+                        ],
+                      ),
                       child: Image.network(
                           "https://i.pinimg.com/564x/39/21/6d/39216d73519bca962bd4a01f3e8f4a4b.jpg",
                           fit: BoxFit.cover),
