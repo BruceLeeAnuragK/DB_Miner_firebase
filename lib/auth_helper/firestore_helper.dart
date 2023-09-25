@@ -10,7 +10,7 @@ class FireStoreHelper {
   static final FireStoreHelper storeHelper = FireStoreHelper._();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  String collection = "Student";
+  String collection = "User";
   String counter = "Counter";
 
   String colId = "Id";
@@ -29,7 +29,7 @@ class FireStoreHelper {
     };
 
     firestore.collection(collection).add(data).then(
-          (value) {
+      (value) {
         log("Student added !!\nID: ${value.id}");
       },
     );
@@ -37,14 +37,18 @@ class FireStoreHelper {
 
   addUser({required UserModel userModel}) {
     Map<String, dynamic> datas = {
+      colId: userModel.id,
       colusername: userModel.username,
       colemail: userModel.email,
       colpassword: userModel.password,
     };
-
-    return firestore.collection(collection).add(datas).then((value) {
-      log("User Added !!\n Username: ${value.id}");
-    });
+    return firestore
+        .collection(collection)
+        .doc(userModel.id.toString())
+        .set(datas);
+    // return firestore.collection(collection).add(datas).then((value) {
+    //   log("User Added !!\n Username: ${value.id}");
+    // });
   }
 
   getUser({required String username}) {
@@ -57,7 +61,7 @@ class FireStoreHelper {
     List<QueryDocumentSnapshot> allData = data.docs;
 
     List<Student> allStudents =
-    allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
+        allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
 
     return allStudents;
   }
@@ -90,10 +94,9 @@ class FireStoreHelper {
     firestore.collection(counter).doc('count').set(data);
   }
 
-
   getCredential({required int id}) async {
     DocumentSnapshot snapshot =
-    await firestore.collection(collection).doc(id.toString()).get();
+        await firestore.collection(collection).doc(id.toString()).get();
     Map userData = snapshot.data() as Map;
     return userData['password'];
   }
