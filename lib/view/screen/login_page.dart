@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
+import 'package:db_miner_firebase/model/student_model.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,9 @@ import 'package:google_fonts/google_fonts.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
+  TextEditingController idcontroller = TextEditingController();
   TextEditingController usercontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
   TextEditingController passcontroller = TextEditingController();
 
   @override
@@ -75,6 +78,36 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  onSubmitted: (val) async {
+                    if (psw == val) {
+                      Get.snackbar(
+                        "Success",
+                        "Login done...",
+                        colorText: Colors.green,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Failure",
+                        "Password Mismatch",
+                        colorText: Colors.red,
+                        snackPosition: SnackPosition.TOP,
+                      );
+                    }
+                    psw = await FireStoreHelper.storeHelper
+                        .getCredential(id: int.parse(val));
+                    log("PSW:  $psw");
+                  },
+                  controller: passcontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -101,8 +134,13 @@ class LoginPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  bool login = await FireStoreHelper.storeHelper.getUserStream(
-                      userId: int.parse("${usercontroller..text}"));
+                  bool login = await FireStoreHelper.storeHelper.addUser(
+                      userModel: UserModel(
+                    username: usercontroller.text,
+                    id: int.parse(idcontroller.text),
+                    email: emailcontroller.text,
+                    password: passcontroller.text,
+                  ));
                   if (login) {
                     Get.offNamed("/ChatPage");
                   }
@@ -157,8 +195,8 @@ class LoginPage extends StatelessWidget {
 
                       if (account != null) {
                         log(" ###################################################name = ${account.displayName}");
-                        UserModel user = UserModel();
-                        user.username = account.displayName;
+                        User user = User();
+                        user.name = account.displayName;
                         user.email = account.email;
                         user.image = account.photoUrl;
                         Get.offNamed("/ChatPage", arguments: user);

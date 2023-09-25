@@ -22,7 +22,7 @@ class ChatPage extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
       ),
       body: StreamBuilder(
-        stream: FireStoreHelper.storeHelper.getUser(id: 101),
+        stream: FireStoreHelper.storeHelper.getUser(username: '101'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             print("###########${snapshot.data}");
