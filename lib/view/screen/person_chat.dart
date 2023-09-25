@@ -1,4 +1,3 @@
-import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 
 class PersonChatPage extends StatelessWidget {

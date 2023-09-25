@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
               accountName: Text("${user?.username ?? 'Anonymous'} "),
               accountEmail: Visibility(
                 visible: user != null,
-                child: Text("${user?.email ?? 'n0@gmail.com'}"),
+                child: Text(user?.email ?? 'n0@gmail.com'),
               ),
             ),
           ],
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               AuthHelper.authHelper.signOut();
               Get.offNamed('/');
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Colors.white,
             ),
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: FireStoreHelper.storeHelper.getUser(id: 101),
+        stream: FireStoreHelper.storeHelper.getUser(username: '101'),
         builder: (context, snapShot) {
           if (snapShot.hasData) {
             List<QueryDocumentSnapshot>? docs =
@@ -60,17 +60,16 @@ class HomePage extends StatelessWidget {
             if (docs != null) {
               List<Student> allStudents = docs
                   .map((doc) =>
-                  Student.fromMap(data: doc.data() as Map<String, dynamic>))
+                      Student.fromMap(data: doc.data() as Map<String, dynamic>))
                   .toList();
 
               int newId = allStudents.length + 101;
               return ListView.builder(
                 itemCount: allStudents.length,
-                itemBuilder: (context, index) =>
-                    ListTile(
-                      title: Text(allStudents[index].name),
-                      subtitle: Text(allStudents[index].age.toString()),
-                    ),
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(allStudents[index].name),
+                  subtitle: Text(allStudents[index].age.toString()),
+                ),
               );
             } else {
               return const Center(
@@ -91,43 +90,41 @@ class HomePage extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (context) =>
-                AlertDialog(
-                  title: Text("Add Student"),
-                  insetPadding: EdgeInsets.all(10),
-                  content: Column(
-                    children: [
-                      TextField(
-                        controller: nameContoller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      TextField(
-                        controller: ageContoller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Student student = Student(
-                          id: 101,
-                          name: nameContoller.text,
-                          age: int.parse(ageContoller.text),
-                        );
-
-                        FireStoreHelper.storeHelper.addStudent(
-                            student: student);
-                      },
-                      icon: Icon(Icons.add),
-                      label: Text("Submit"),
+            builder: (context) => AlertDialog(
+              title: const Text("Add Student"),
+              insetPadding: const EdgeInsets.all(10),
+              content: Column(
+                children: [
+                  TextField(
+                    controller: nameContoller,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
-                  ],
+                  ),
+                  TextField(
+                    controller: ageContoller,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Student student = Student(
+                      id: 101,
+                      name: nameContoller.text,
+                      age: int.parse(ageContoller.text),
+                    );
+
+                    FireStoreHelper.storeHelper.addStudent(student: student);
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text("Submit"),
                 ),
+              ],
+            ),
           );
         },
       ),

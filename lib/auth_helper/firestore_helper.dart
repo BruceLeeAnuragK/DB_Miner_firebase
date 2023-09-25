@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_miner_firebase/model/student_model.dart';
+import 'package:db_miner_firebase/model/user_model.dart';
 
 class FireStoreHelper {
   FireStoreHelper._();
@@ -16,6 +17,10 @@ class FireStoreHelper {
   String colName = "name";
   String colAge = "age";
 
+  String colusername = "age";
+  String colemail = "age";
+  String colpassword = "age";
+
   addStudent({required Student student}) {
     Map<String, dynamic> data = {
       colId: student.id,
@@ -24,10 +29,26 @@ class FireStoreHelper {
     };
 
     firestore.collection(collection).add(data).then(
-      (value) {
+          (value) {
         log("Student added !!\nID: ${value.id}");
       },
     );
+  }
+
+  addUser({required UserModel userModel}) {
+    Map<String, dynamic> datas = {
+      colusername: userModel.username,
+      colemail: userModel.email,
+      colpassword: userModel.password,
+    };
+
+    return firestore.collection(collection).add(datas).then((value) {
+      log("User Added !!\n Username: ${value.id}");
+    });
+  }
+
+  getUser({required String username}) {
+    firestore.collection(collection).doc(username.toString()).snapshots();
   }
 
   Future<List<Student>> getAllStudent() async {
@@ -36,7 +57,7 @@ class FireStoreHelper {
     List<QueryDocumentSnapshot> allData = data.docs;
 
     List<Student> allStudents =
-        allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
+    allData.map((e) => Student.fromMap(data: e.data() as Map)).toList();
 
     return allStudents;
   }
@@ -69,19 +90,16 @@ class FireStoreHelper {
     firestore.collection(counter).doc('count').set(data);
   }
 
-  getUser({required int id}) {
-    return firestore.collection(collection).doc(id.toString()).snapshots();
-  }
 
   getCredential({required int id}) async {
     DocumentSnapshot snapshot =
-        await firestore.collection(collection).doc(id.toString()).get();
+    await firestore.collection(collection).doc(id.toString()).get();
     Map userData = snapshot.data() as Map;
     return userData['password'];
   }
 
   getChats({required int senderId, required int receivedId}) async {
-    Map sender = await getUser(id: senderId);
+    Map sender = await getUser(username: '${senderId}');
     Map senderChat = sender['sent']['$receivedId'];
     Map recievedChat = sender['recieved']['$receivedId'];
     Map chats = {

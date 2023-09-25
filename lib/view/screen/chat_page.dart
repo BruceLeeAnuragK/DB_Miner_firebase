@@ -22,19 +22,19 @@ class ChatPage extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
       ),
       body: StreamBuilder(
-        stream: FireStoreHelper.storeHelper.getUser(id: 101),
+        stream: FireStoreHelper.storeHelper.getUser(username: '101'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             print("###########${snapshot.data}");
             return ListView.builder(
               itemCount: 3,
-              itemBuilder: (context, index) => ListTile(
+              itemBuilder: (context, index) => const ListTile(
                 title: Text(""),
                 subtitle: Text(""),
               ),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
