@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ChatPage extends StatelessWidget {
   ChatPage({super.key});
 
-  UserModel? user = Get.arguments;
+  User? user = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +20,15 @@ class ChatPage extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
       body: StreamBuilder(
         stream: FireStoreHelper.storeHelper.getUser(username: '101'),
@@ -29,7 +38,7 @@ class ChatPage extends StatelessWidget {
             return ListView.builder(
               itemCount: 3,
               itemBuilder: (context, index) => const ListTile(
-                title: Text(""),
+                title: Text("hi"),
                 subtitle: Text(""),
               ),
             );

@@ -42,10 +42,7 @@ class FireStoreHelper {
       colemail: userModel.email,
       colpassword: userModel.password,
     };
-    return firestore
-        .collection(collection)
-        .doc(userModel.id.toString())
-        .set(datas);
+    firestore.collection(collection).doc(userModel.id.toString()).set(datas);
     // return firestore.collection(collection).add(datas).then((value) {
     //   log("User Added !!\n Username: ${value.id}");
     // });

@@ -37,6 +37,21 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
+                    // psw = await FireStoreHelper.storeHelper
+                    //     .getCredential(id: int.parse(val));
+                    // log("PSW:  $psw");
+                  },
+                  controller: idcontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Your ID",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  onSubmitted: (val) async {
                     psw = await FireStoreHelper.storeHelper
                         .getCredential(id: int.parse(val));
                     log("PSW:  $psw");
@@ -52,28 +67,28 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
-                    if (psw == val) {
-                      Get.snackbar(
-                        "Success",
-                        "Login done...",
-                        colorText: Colors.green,
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
-                    } else {
-                      Get.snackbar(
-                        "Failure",
-                        "Password Mismatch",
-                        colorText: Colors.red,
-                        snackPosition: SnackPosition.TOP,
-                      );
-                    }
-                    psw = await FireStoreHelper.storeHelper
-                        .getCredential(id: int.parse(val));
-                    log("PSW:  $psw");
+                    // if (psw == val) {
+                    //   Get.snackbar(
+                    //     "Success",
+                    //     "Login done...",
+                    //     colorText: Colors.green,
+                    //     snackPosition: SnackPosition.BOTTOM,
+                    //   );
+                    // } else {
+                    //   Get.snackbar(
+                    //     "Failure",
+                    //     "Password Mismatch",
+                    //     colorText: Colors.red,
+                    //     snackPosition: SnackPosition.TOP,
+                    //   );
+                    // }
+                    // psw = await FireStoreHelper.storeHelper
+                    //     .getCredential(id: int.parse(val));
+                    // log("PSW:  $psw");
                   },
-                  controller: passcontroller,
+                  controller: emailcontroller,
                   decoration: const InputDecoration(
-                    labelText: "Password",
+                    labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -82,24 +97,24 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
-                    if (psw == val) {
-                      Get.snackbar(
-                        "Success",
-                        "Login done...",
-                        colorText: Colors.green,
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
-                    } else {
-                      Get.snackbar(
-                        "Failure",
-                        "Password Mismatch",
-                        colorText: Colors.red,
-                        snackPosition: SnackPosition.TOP,
-                      );
-                    }
-                    psw = await FireStoreHelper.storeHelper
-                        .getCredential(id: int.parse(val));
-                    log("PSW:  $psw");
+                    // if (psw == val) {
+                    //   Get.snackbar(
+                    //     "Success",
+                    //     "Login done...",
+                    //     colorText: Colors.green,
+                    //     snackPosition: SnackPosition.BOTTOM,
+                    //   );
+                    // } else {
+                    //   Get.snackbar(
+                    //     "Failure",
+                    //     "Password Mismatch",
+                    //     colorText: Colors.red,
+                    //     snackPosition: SnackPosition.TOP,
+                    //   );
+                    // }
+                    // psw = await FireStoreHelper.storeHelper
+                    //     .getCredential(id: int.parse(val));
+                    // log("PSW:  $psw");
                   },
                   controller: passcontroller,
                   decoration: const InputDecoration(
@@ -115,8 +130,8 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       bool login = await AuthHelper.authHelper.registerUser(
-                        email: "demo12@gmail.com",
-                        password: "d1e2m3o4",
+                        email: emailcontroller.text,
+                        password: passcontroller.text,
                       );
                     },
                     child: const Text(
@@ -134,16 +149,17 @@ class LoginPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  bool login = await FireStoreHelper.storeHelper.addUser(
-                      userModel: UserModel(
-                    username: usercontroller.text,
-                    id: int.parse(idcontroller.text),
-                    email: emailcontroller.text,
-                    password: passcontroller.text,
-                  ));
-                  if (login) {
-                    Get.offNamed("/ChatPage");
-                  }
+                  await FireStoreHelper.storeHelper.addUser(
+                    userModel: UserModel(
+                      username: usercontroller.text,
+                      id: int.parse(idcontroller.text),
+                      email: emailcontroller.text,
+                      password: passcontroller.text,
+                    ),
+                  );
+                  // if (login) {
+                  //   Get.offNamed("/ChatPage");
+                  // }
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(10),
@@ -164,7 +180,7 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       bool login =
-                          await AuthHelper.authHelper.loginAnonymusly();
+                      await AuthHelper.authHelper.loginAnonymusly();
                       if (login) {
                         Get.offNamed("/HomePage");
                       }
@@ -191,10 +207,13 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       GoogleSignInAccount? account =
-                          await AuthHelper.authHelper.googleSignIn();
-
+                      await AuthHelper.authHelper.googleSignIn();
+                      Get.snackbar(
+                          "Successfully", "You are logged in Google Account");
                       if (account != null) {
-                        log(" ###################################################name = ${account.displayName}");
+                        log(
+                            " ###################################################name = ${account
+                                .displayName}");
                         User user = User();
                         user.name = account.displayName;
                         user.email = account.email;
