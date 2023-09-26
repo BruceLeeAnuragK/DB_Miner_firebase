@@ -21,7 +21,7 @@ class ChatPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.white,
           ),

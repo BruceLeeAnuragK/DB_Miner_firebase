@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               AuthHelper.authHelper.signOut();
               Get.offNamed('/');
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Colors.white,
             ),
@@ -91,19 +91,19 @@ class HomePage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text("Add Student"),
-              insetPadding: EdgeInsets.all(10),
+              title: const Text("Add Student"),
+              insetPadding: const EdgeInsets.all(10),
               content: Column(
                 children: [
                   TextField(
                     controller: nameContoller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                   ),
                   TextField(
                     controller: ageContoller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -120,8 +120,8 @@ class HomePage extends StatelessWidget {
 
                     FireStoreHelper.storeHelper.addStudent(student: student);
                   },
-                  icon: Icon(Icons.add),
-                  label: Text("Submit"),
+                  icon: const Icon(Icons.add),
+                  label: const Text("Submit"),
                 ),
               ],
             ),
