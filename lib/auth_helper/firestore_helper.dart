@@ -17,9 +17,9 @@ class FireStoreHelper {
   String colName = "name";
   String colAge = "age";
 
-  String colusername = "age";
-  String colemail = "age";
-  String colpassword = "age";
+  String colusername = "username";
+  String colemail = "email";
+  String colpassword = "password";
 
   addStudent({required Student student}) {
     Map<String, dynamic> data = {
@@ -94,7 +94,9 @@ class FireStoreHelper {
   getCredential({required int id}) async {
     DocumentSnapshot snapshot =
         await firestore.collection(collection).doc(id.toString()).get();
+
     Map userData = snapshot.data() as Map;
+
     return userData['password'];
   }
 
