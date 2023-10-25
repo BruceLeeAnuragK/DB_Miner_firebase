@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../model/student_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,21 +14,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     User? user = Get.arguments;
     return Scaffold(
-      drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text("${user?.name ?? 'Anonymous'} "),
-              accountEmail: Visibility(
-                visible: user != null,
-                child: Text("${user?.email ?? 'n0@gmail.com'}"),
-              ),
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
+        leading: Builder(
+          builder: (context) => MaterialButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: (user?.image?.isNotEmpty ?? false)
+                ? CircleAvatar(
+                    foregroundImage: NetworkImage("${user?.image}"),
+                    radius: 20,
+                  )
+                : Icon(Icons.arrow_back_ios),
+          ),
+        ),
         title: Text(
           "Home Page",
           style: GoogleFonts.sofia(
@@ -49,6 +48,23 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(
+                radius: 30,
+                foregroundImage: NetworkImage("${user?.image}"),
+              ),
+              accountName: Text("${user?.name ?? 'Anonymous'} "),
+              accountEmail: Visibility(
+                visible: user != null,
+                child: Text("${user?.email ?? 'n0@gmail.com'}"),
+              ),
+            ),
+          ],
+        ),
       ),
       body: StreamBuilder(
         stream: FireStoreHelper.storeHelper.getUser(username: '101'),
