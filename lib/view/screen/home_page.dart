@@ -13,13 +13,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? user = Get.arguments;
+    User? user = Get.arguments;
     return Scaffold(
       drawer: Drawer(
         child: Column(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text("${user?.username ?? 'Anonymous'} "),
+              accountName: Text("${user?.name ?? 'Anonymous'} "),
               accountEmail: Visibility(
                 visible: user != null,
                 child: Text("${user?.email ?? 'n0@gmail.com'}"),

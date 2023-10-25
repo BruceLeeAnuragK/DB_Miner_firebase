@@ -180,7 +180,7 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       bool login =
-                      await AuthHelper.authHelper.loginAnonymusly();
+                          await AuthHelper.authHelper.loginAnonymusly();
                       if (login) {
                         Get.offNamed("/HomePage");
                       }
@@ -207,18 +207,16 @@ class LoginPage extends StatelessWidget {
                   MaterialButton(
                     onPressed: () async {
                       GoogleSignInAccount? account =
-                      await AuthHelper.authHelper.googleSignIn();
+                          await AuthHelper.authHelper.googleSignIn();
                       Get.snackbar(
                           "Successfully", "You are logged in Google Account");
                       if (account != null) {
-                        log(
-                            " ###################################################name = ${account
-                                .displayName}");
+                        log(" ###################################################name = ${account.displayName}");
                         User user = User();
                         user.name = account.displayName;
                         user.email = account.email;
                         user.image = account.photoUrl;
-                        Get.offNamed("/ChatPage", arguments: user);
+                        Get.offNamed("/HomePage", arguments: user);
                       }
                     },
                     child: Container(
