@@ -52,9 +52,9 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
-                    psw = await FireStoreHelper.storeHelper
-                        .getCredential(id: int.parse(val));
-                    log("PSW:  $psw");
+                    // psw = await FireStoreHelper.storeHelper
+                    //     .getCredential(id: int.parse(val));
+                    // log("PSW:  $psw");
                   },
                   controller: usercontroller,
                   decoration: const InputDecoration(
@@ -121,6 +121,7 @@ class LoginPage extends StatelessWidget {
                     labelText: "Password",
                     border: OutlineInputBorder(),
                   ),
+                  obscureText: true,
                 ),
               ),
               Row(
@@ -157,9 +158,8 @@ class LoginPage extends StatelessWidget {
                       password: passcontroller.text,
                     ),
                   );
-                  // if (login) {
-                  //   Get.offNamed("/ChatPage");
-                  // }
+
+                  Get.offNamed("/HomePage");
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(10),

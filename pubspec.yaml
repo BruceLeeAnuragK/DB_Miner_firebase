@@ -41,6 +41,8 @@ dependencies:
   cloud_firestore: any
   google_sign_in: any
   google_fonts: any
+  flutter_slidable:
+  logger:
 
 
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class UserModel {
   int id;
   String username;
@@ -11,12 +13,14 @@ class UserModel {
     required this.password,
   });
 
-  factory UserModel.fromMap({required Map data}) => UserModel(
-        id: data['id'],
-        username: data['username'],
-        email: data['email'],
-        password: data["password"],
-      );
+  factory UserModel.fromMap({required Map data}) {
+    return UserModel(
+      id: data['Id'],
+      username: data['username'],
+      email: data['email'],
+      password: data["password"],
+    );
+  }
 }
 
 class User {

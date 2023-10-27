@@ -31,7 +31,7 @@ class ChatPage extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FireStoreHelper.storeHelper.getUser(username: '101'),
+        stream: FireStoreHelper.storeHelper.getUser(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             print("###########${snapshot.data}");
