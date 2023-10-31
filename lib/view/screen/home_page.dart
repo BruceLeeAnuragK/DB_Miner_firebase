@@ -7,6 +7,7 @@ import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../model/student_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -101,8 +102,7 @@ class HomePage extends StatelessWidget {
                       ),
                       SlidableAction(
                         onPressed: (val) {
-                          // FireStoreHelper.storeHelper
-                          //     .deleteUser(id: allUser[index].id);
+                          UserModel user = allUser;
                         },
                         icon: Icons.delete,
                         backgroundColor: Colors.red,
@@ -133,40 +133,64 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         label: Text("Add User"),
         onPressed: () {
-          TextEditingController nameContoller = TextEditingController();
-          TextEditingController emailController = TextEditingController();
+          TextEditingController usercontroller = TextEditingController();
+          TextEditingController emailcontroller = TextEditingController();
+          TextEditingController passcontroller = TextEditingController();
 
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
               title: const Text("Add Student"),
               insetPadding: const EdgeInsets.all(10),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      initialValue: nameContoller.text,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        initialValue: usercontroller.text,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      initialValue: emailController.text,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        initialValue: emailcontroller.text,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        initialValue: passcontroller.text,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               actions: [
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    GoogleSignInAccount? account =
+                        await AuthHelper.authHelper.googleSignIn();
+                    Get.snackbar(
+                        "Successfully", "You are logged in Google Account");
+                    if (account != null) {
+                      log(" ###################################################name = ${account.displayName}");
+                      User user = User();
+                      user.name = account.displayName;
+                      user.email = account.email;
+                      user.image = account.photoUrl;
+                    }
+                  },
                   icon: const Icon(Icons.add),
                   label: const Text("Add"),
                 ),

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -58,18 +59,42 @@ class AuthHelper {
   }
 
   Future<GoogleSignInAccount?> googleSignIn() async {
-    GoogleSignInAccount? account = await google.signIn();
+    try {
+      GoogleSignInAccount? account = await google.signIn();
 
-    GoogleSignInAuthentication authentication = await account!.authentication;
+      GoogleSignInAuthentication authentication = await account!.authentication;
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: authentication.idToken,
-      accessToken: authentication.accessToken,
-    );
+      AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: authentication.idToken,
+        accessToken: authentication.accessToken,
+      );
 
-    FirebaseAuth.instance.signInWithCredential(credential);
+      FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      User? user = userCredential.user;
+      return account;
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
-    return account;
+  final CollectionReference _credentialsCollection =
+      FirebaseFirestore.instance.collection('credentials');
+
+  Future<String?> getCredential({required int id}) async {
+    try {
+      DocumentSnapshot credentialDoc =
+          await _credentialsCollection.doc(id.toString()).get();
+      if (credentialDoc.exists) {
+        return credentialDoc['password'];
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print('Error getting credential: $error');
+      return null;
+    }
   }
 
   signOut() {

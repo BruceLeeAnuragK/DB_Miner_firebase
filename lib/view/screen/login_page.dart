@@ -67,24 +67,24 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
-                    // if (psw == val) {
-                    //   Get.snackbar(
-                    //     "Success",
-                    //     "Login done...",
-                    //     colorText: Colors.green,
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //   );
-                    // } else {
-                    //   Get.snackbar(
-                    //     "Failure",
-                    //     "Password Mismatch",
-                    //     colorText: Colors.red,
-                    //     snackPosition: SnackPosition.TOP,
-                    //   );
-                    // }
-                    // psw = await FireStoreHelper.storeHelper
-                    //     .getCredential(id: int.parse(val));
-                    // log("PSW:  $psw");
+                    if (psw == val) {
+                      Get.snackbar(
+                        "Success",
+                        "Login done...",
+                        colorText: Colors.green,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Failure",
+                        "Password Mismatch",
+                        colorText: Colors.red,
+                        snackPosition: SnackPosition.TOP,
+                      );
+                    }
+                    psw = (await FireStoreHelper.storeHelper
+                        .getCredential(id: int.parse(val))) as int?;
+                    log("PSW:  $psw");
                   },
                   controller: emailcontroller,
                   decoration: const InputDecoration(
@@ -97,24 +97,24 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TextField(
                   onSubmitted: (val) async {
-                    // if (psw == val) {
-                    //   Get.snackbar(
-                    //     "Success",
-                    //     "Login done...",
-                    //     colorText: Colors.green,
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //   );
-                    // } else {
-                    //   Get.snackbar(
-                    //     "Failure",
-                    //     "Password Mismatch",
-                    //     colorText: Colors.red,
-                    //     snackPosition: SnackPosition.TOP,
-                    //   );
-                    // }
-                    // psw = await FireStoreHelper.storeHelper
-                    //     .getCredential(id: int.parse(val));
-                    // log("PSW:  $psw");
+                    if (psw == val) {
+                      Get.snackbar(
+                        "Success",
+                        "Login done...",
+                        colorText: Colors.green,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Failure",
+                        "Password Mismatch",
+                        colorText: Colors.red,
+                        snackPosition: SnackPosition.TOP,
+                      );
+                    }
+                    psw = (await FireStoreHelper.storeHelper
+                        .getCredential(id: int.parse(val))) as int?;
+                    log("PSW:  $psw");
                   },
                   controller: passcontroller,
                   decoration: const InputDecoration(
