@@ -1,19 +1,17 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
+import 'package:db_miner_firebase/controller/ObscureController.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../../model/student_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+  HomePage({Key? key}) : super(key: key);
+  ObscureController seenController = Get.put(ObscureController());
   @override
   Widget build(BuildContext context) {
     User? user = Get.arguments;
@@ -90,34 +88,77 @@ class HomePage extends StatelessWidget {
 
               int newId = allUser.length + 101;
               return ListView.builder(
-                itemCount: allUser.length,
-                itemBuilder: (context, index) => Slidable(
-                  endActionPane: ActionPane(
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (val) {},
-                        icon: Icons.edit,
-                        backgroundColor: Colors.blue,
+                  itemCount: allUser.length,
+                  itemBuilder: (context, index) {
+                    UserModel userModel = allUser[index];
+                    return Slidable(
+                      endActionPane: ActionPane(
+                        motion: ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (val) {
+                              UserModel user = userModel;
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Edit Student"),
+                                  content: Column(
+                                    children: [
+                                      TextFormField(
+                                        onChanged: (val) {
+                                          user.username = val;
+                                        },
+                                        initialValue: userModel.username,
+                                        decoration: InputDecoration(
+                                          labelText: "Username",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                      TextFormField(
+                                        onChanged: (val) {
+                                          user.email = val;
+                                        },
+                                        initialValue: userModel.email,
+                                        decoration: InputDecoration(
+                                          labelText: "Email",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                      TextFormField(
+                                        onChanged: (val) {
+                                          user.password = val;
+                                        },
+                                        initialValue: userModel.password,
+                                        decoration: InputDecoration(
+                                          labelText: "Password",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icons.edit,
+                            backgroundColor: Colors.blue,
+                          ),
+                          SlidableAction(
+                            onPressed: (val) {},
+                            icon: Icons.delete,
+                            backgroundColor: Colors.red,
+                          ),
+                        ],
                       ),
-                      SlidableAction(
-                        onPressed: (val) {
-                          UserModel user = allUser;
-                        },
-                        icon: Icons.delete,
-                        backgroundColor: Colors.red,
+                      child: Card(
+                        child: ListTile(
+                          leading: Text(allUser[index].id.toString()),
+                          title: Text(allUser[index].username),
+                          subtitle: Text(allUser[index].email.toString()),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Card(
-                    child: ListTile(
-                      leading: Text(allUser[index].id.toString()),
-                      title: Text(allUser[index].username),
-                      subtitle: Text(allUser[index].email.toString()),
-                    ),
-                  ),
-                ),
-              );
+                    );
+                  });
             } else {
               return const Center(
                 child: Text("no docs"),
@@ -133,6 +174,7 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         label: Text("Add User"),
         onPressed: () {
+          TextEditingController idcontroller = TextEditingController();
           TextEditingController usercontroller = TextEditingController();
           TextEditingController emailcontroller = TextEditingController();
           TextEditingController passcontroller = TextEditingController();
@@ -151,6 +193,7 @@ class HomePage extends StatelessWidget {
                       child: TextFormField(
                         initialValue: usercontroller.text,
                         decoration: const InputDecoration(
+                          label: Text("Username"),
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -160,18 +203,28 @@ class HomePage extends StatelessWidget {
                       child: TextFormField(
                         initialValue: emailcontroller.text,
                         decoration: const InputDecoration(
+                          label: Text("Email"),
                           border: OutlineInputBorder(),
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        initialValue: passcontroller.text,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                      child: Obx(() {
+                        return TextFormField(
+                          obscureText: seenController.obscureText.value,
+                          initialValue: passcontroller.text,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  seenController.showText();
+                                },
+                                icon: Icon(Icons.remove_red_eye_outlined)),
+                            label: Text("Password"),
+                            border: OutlineInputBorder(),
+                          ),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -179,25 +232,24 @@ class HomePage extends StatelessWidget {
               actions: [
                 ElevatedButton.icon(
                   onPressed: () async {
-                    GoogleSignInAccount? account =
-                        await AuthHelper.authHelper.googleSignIn();
-                    Get.snackbar(
-                        "Successfully", "You are logged in Google Account");
-                    if (account != null) {
-                      log(" ###################################################name = ${account.displayName}");
-                      User user = User();
-                      user.name = account.displayName;
-                      user.email = account.email;
-                      user.image = account.photoUrl;
-                    }
+                    UserModel userModel = UserModel(
+                      id: int.parse(idcontroller.text),
+                      username: usercontroller.text,
+                      email: emailcontroller.text,
+                      password: passcontroller.text,
+                    );
+                    FireStoreHelper.storeHelper.addUser(userModel: userModel);
+                    Get.back();
                   },
                   icon: const Icon(Icons.add),
                   label: const Text("Add"),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.back();
+                  },
                   icon: const Icon(Icons.delete),
-                  label: const Text("Delete"),
+                  label: const Text("Cancle"),
                 ),
               ],
             ),

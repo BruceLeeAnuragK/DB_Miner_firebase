@@ -13,6 +13,12 @@ class UserModel {
     required this.password,
   });
 
+  UserModel.getInstance(
+      {this.id = 101,
+      this.username = "No Name",
+      this.email = "name23@gmail.com",
+      this.password = "name@123"});
+
   factory UserModel.fromMap({required Map data}) {
     return UserModel(
       id: data['Id'],

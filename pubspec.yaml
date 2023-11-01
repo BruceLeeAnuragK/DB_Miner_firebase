@@ -37,12 +37,16 @@ dependencies:
   cupertino_icons:
   firebase_core: any
   firebase_auth: any
+  firebase_storage: any
   get: any
   cloud_firestore: any
   google_sign_in: any
   google_fonts: any
   flutter_slidable:
   logger:
+  reference:
+  image_picker:
+
 
 
 

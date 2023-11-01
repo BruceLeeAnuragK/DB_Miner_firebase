@@ -1,10 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
 class FireStoreHelper {
@@ -32,41 +30,87 @@ class FireStoreHelper {
     return firestore.collection(collection).snapshots();
   }
 
-  Future resetEmail(String newEmail) async {
-    var message;
-    FireStoreHelper firebaseUser = await storeHelper.currentUser();
-    firebaseUser
-        .updateEmail(newEmail)
-        .then(
-          (value) => message = 'Success',
-        )
-        .catchError((onError) => message = 'error');
-    return message;
-  }
+  // final ImagePicker _picker = ImagePicker();
+  //
+  // Future<void> _uploadFile() async {
+  //   XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //
+  //   if (image == null) return; // User canceled the operation
+  //
+  //   File file = File(image.path);
+  //   Reference storageRef = _storage.ref().child('images/${DateTime.now()}.png');
+  //
+  //   UploadTask uploadTask = storageRef.putFile(file);
+  //
+  //   await uploadTask.whenComplete(() => print('File uploaded'));
+  // }
 
-  updateEmail(String email) {}
-  final CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('users');
-  Future currentUser() async {
+  Future<void> deleteUser({required int id}) async {
     try {
-      UserModel? user = (await FirebaseAuth.instance.currentUser) as UserModel?;
-      if (user != null) {
-        DocumentSnapshot userDoc =
-            await _usersCollection.doc(user.id as String?).get();
-        if (userDoc.exists) {
-          return user;
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      await firestore.collection(collection).doc(id.toString()).delete();
+      logger.i('User with ID $id deleted successfully');
     } catch (error) {
-      print('Error getting current user: $error');
-      return null;
+      logger.e('Error deleting user: $error');
     }
   }
 
+  Future<void> updateUser(
+      {required int id, required UserModel updatedUserModel}) async {
+    try {
+      Map<String, dynamic> updatedData = {
+        colId: updatedUserModel.id,
+        colUsername: updatedUserModel.username,
+        colEmail: updatedUserModel.email,
+        colPassword: updatedUserModel.password,
+      };
+
+      await firestore
+          .collection(collection)
+          .doc(id.toString())
+          .update(updatedData);
+      logger.i('User with ID $id updated successfully');
+    } catch (error) {
+      logger.e('Error updating user: $error');
+    }
+  }
+
+  //
+  // Future resetEmail(String newEmail) async {
+  //   var message;
+  //   FireStoreHelper firebaseUser = await storeHelper.currentUser();
+  //   firebaseUser
+  //       .updateEmail(newEmail)
+  //       .then(
+  //         (value) => message = 'Success',
+  //       )
+  //       .catchError((onError) => message = 'error');
+  //   return message;
+  // }
+
+  // updateEmail(String email) {}
+  // final CollectionReference _usersCollection =
+  //     FirebaseFirestore.instance.collection('users');
+  // Future currentUser() async {
+  //   try {
+  //     UserModel? user = (await FirebaseAuth.instance.currentUser) as UserModel?;
+  //     if (user != null) {
+  //       DocumentSnapshot userDoc =
+  //           await _usersCollection.doc(user.id as String?).get();
+  //       if (userDoc.exists) {
+  //         return user;
+  //       } else {
+  //         return null;
+  //       }
+  //     } else {
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     print('Error getting current user: $error');
+  //     return null;
+  //   }
+  // }
+
+  registerUser() {}
   final CollectionReference _credentialsCollection =
       FirebaseFirestore.instance.collection('credentials');
 

@@ -216,8 +216,8 @@ class LoginPage extends StatelessWidget {
                         user.name = account.displayName;
                         user.email = account.email;
                         user.image = account.photoUrl;
-                        Get.offNamed("/HomePage", arguments: user);
                       }
+                      Get.offNamed("/HomePage");
                     },
                     child: Container(
                       height: 50,
