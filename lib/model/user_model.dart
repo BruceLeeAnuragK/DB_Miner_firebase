@@ -32,7 +32,7 @@ class UserModel {
         email: data['email'],
         password: data['password'],
         contact: data['contact_no'],
-        contacts: data['contacts']);
+        contacts: data['contacts']['chat']);
   }
 }
 

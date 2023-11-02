@@ -16,13 +16,15 @@ class FireStoreHelper {
   static String colDisplay = "display_name";
   static String colEmail = "email";
   static String colPassword = "password";
-  static int colcontact = 0;
+  static String colcontact = "";
+
   addUser({required UserModel userModel}) async {
     Map<String, dynamic> data = {
       colId: userModel.displayname,
       colUsername: userModel.username,
       colEmail: userModel.email,
       colPassword: userModel.password,
+      colcontact: int.parse(userModel.contact.toString()),
     };
     logger.i(data);
     firestore
