@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:db_miner_firebase/auth_helper/authhelper.dart';
 import 'package:db_miner_firebase/auth_helper/firestore_helper.dart';
-import 'package:db_miner_firebase/model/student_model.dart';
 import 'package:db_miner_firebase/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +14,8 @@ class LoginPage extends StatelessWidget {
   TextEditingController usercontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passcontroller = TextEditingController();
+  TextEditingController diplaynamecontroller = TextEditingController();
+  TextEditingController contactNocontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +153,9 @@ class LoginPage extends StatelessWidget {
                   await FireStoreHelper.storeHelper.addUser(
                     userModel: UserModel(
                       username: usercontroller.text,
-                      id: int.parse(idcontroller.text),
+                      displayname: diplaynamecontroller.text,
+                      contact: int.parse(contactNocontroller.text),
+                      contacts: [],
                       email: emailcontroller.text,
                       password: passcontroller.text,
                     ),

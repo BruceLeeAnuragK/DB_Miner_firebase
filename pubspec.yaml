@@ -46,6 +46,7 @@ dependencies:
   logger:
   reference:
   image_picker:
+  provider:
 
 
 

@@ -152,7 +152,14 @@ class HomePage extends StatelessWidget {
                       ),
                       child: Card(
                         child: ListTile(
-                          leading: Text(allUser[index].id.toString()),
+                          leading: Text(
+                            allUser[index].displayname.toString(),
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           title: Text(allUser[index].username),
                           subtitle: Text(allUser[index].email.toString()),
                         ),
@@ -178,6 +185,8 @@ class HomePage extends StatelessWidget {
           TextEditingController usercontroller = TextEditingController();
           TextEditingController emailcontroller = TextEditingController();
           TextEditingController passcontroller = TextEditingController();
+          TextEditingController diplaynamecontroller = TextEditingController();
+          TextEditingController contactNocontroller = TextEditingController();
 
           showDialog(
             context: context,
@@ -233,10 +242,12 @@ class HomePage extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () async {
                     UserModel userModel = UserModel(
-                      id: int.parse(idcontroller.text),
+                      displayname: diplaynamecontroller.text,
                       username: usercontroller.text,
                       email: emailcontroller.text,
                       password: passcontroller.text,
+                      contact: int.parse(contactNocontroller.text),
+                      contacts: [],
                     );
                     FireStoreHelper.storeHelper.addUser(userModel: userModel);
                     Get.back();

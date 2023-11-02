@@ -1,31 +1,38 @@
 import 'dart:developer';
 
 class UserModel {
-  int id;
   String username;
+  String displayname;
   String email;
   String password;
+  int contact;
+  List contacts;
 
   UserModel({
-    required this.id,
     required this.username,
+    required this.displayname,
     required this.email,
     required this.password,
+    required this.contact,
+    required this.contacts,
   });
 
   UserModel.getInstance(
-      {this.id = 101,
+      {this.displayname = "NO name",
       this.username = "No Name",
       this.email = "name23@gmail.com",
+      this.contact = 0,
+      this.contacts = const [],
       this.password = "name@123"});
 
   factory UserModel.fromMap({required Map data}) {
     return UserModel(
-      id: data['Id'],
-      username: data['username'],
-      email: data['email'],
-      password: data["password"],
-    );
+        username: data['user_name'],
+        displayname: data['display_name'],
+        email: data['email'],
+        password: data['password'],
+        contact: data['contact_no'],
+        contacts: data['contacts']);
   }
 }
 

@@ -12,18 +12,23 @@ class FireStoreHelper {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static String collection = "User";
   static String colId = "Id";
-  static String colUsername = "username";
+  static String colUsername = "user_name";
+  static String colDisplay = "display_name";
   static String colEmail = "email";
   static String colPassword = "password";
+  static int colcontact = 0;
   addUser({required UserModel userModel}) async {
     Map<String, dynamic> data = {
-      colId: userModel.id,
+      colId: userModel.displayname,
       colUsername: userModel.username,
       colEmail: userModel.email,
       colPassword: userModel.password,
     };
     logger.i(data);
-    firestore.collection(collection).doc((userModel.id).toString()).set(data);
+    firestore
+        .collection(collection)
+        .doc((userModel.username).toString())
+        .set(data);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getUser() {
@@ -58,7 +63,7 @@ class FireStoreHelper {
       {required int id, required UserModel updatedUserModel}) async {
     try {
       Map<String, dynamic> updatedData = {
-        colId: updatedUserModel.id,
+        colId: updatedUserModel.displayname,
         colUsername: updatedUserModel.username,
         colEmail: updatedUserModel.email,
         colPassword: updatedUserModel.password,
